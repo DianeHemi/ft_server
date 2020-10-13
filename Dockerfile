@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 	gettext-base \
 	mariadb-server \
 	nginx \
+	openssl \
 	php7.3-common \
 	php7.3-fpm \
 	php7.3-mysql \
@@ -62,4 +63,11 @@ RUN service mysql start \
 COPY /srcs/launch.sh .
 CMD envsubst $'AUTOINDEX' < /tmp/nginx.conf > /etc/nginx/sites-available/localhost \
 	&& bash ./launch.sh \
+	&& echo "\nOpen localhost : https://localhost/" \
+	&& echo "Access phpMyAdmin : https://localhost/phpMyAdmin/" \
+	&& echo "Access Wordpress : https://localhost/wordpress/" \
+	&& echo "Access Wordpress - back : https://localhost/wordpress/wp-admin/" \
+	&& echo "User : admin - psw : admin" \
 	&& tail -f /dev/null
+
+EXPOSE 80 443
