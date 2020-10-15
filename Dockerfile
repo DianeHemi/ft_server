@@ -34,7 +34,6 @@ RUN cp /tmp/nginx.conf /etc/nginx/sites-available/localhost \
 	&& chown www-data:www-data /var/www/* \
 	&& chmod 755 /var/www/*
 
-
 # [Configuration phpmyadmin]
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz \
 	&& tar -zxvf phpMyAdmin-5.0.2-all-languages.tar.gz \
@@ -58,16 +57,10 @@ RUN service mysql start \
 	&& mysql -u root < /usr/share/mysql/mariadb_user_creation.sql \
 	&& mysql wordpress_db -u root < /var/www/localhost/wordpress/wordpress_db.sql
 
-
 # [Prepare to launch]
 COPY /srcs/launch.sh .
 CMD envsubst $'AUTOINDEX' < /tmp/nginx.conf > /etc/nginx/sites-available/localhost \
 	&& bash ./launch.sh \
-	&& echo "\nOpen localhost : https://localhost/" \
-	&& echo "Access phpMyAdmin : https://localhost/phpMyAdmin/" \
-	&& echo "Access Wordpress : https://localhost/wordpress/" \
-	&& echo "Access Wordpress - back : https://localhost/wordpress/wp-admin/" \
-	&& echo "User : admin - psw : admin" \
 	&& tail -f /dev/null
 
 EXPOSE 80 443
